@@ -4,12 +4,16 @@ import SideBar from "./components/SideBar";
 import Content from "./components/Content";
 
 function App() {
-  const [isClickedNewProject, setIsClickedNewProject] = useState(false);
+  const [isClickedNewProject, setIsClickedNewProject] = useState(true);
+
+  function handleClickAddNewProject(){
+    setIsClickedNewProject(prev => !prev);
+  }
 
   return (
-    <div className="flex gap-8">
-      <SideBar/>
-      <Content/>
+    <div className="flex gap-10">
+      <SideBar onClickAddProject={handleClickAddNewProject}/>
+      <Content isClickedNewProject={isClickedNewProject}/>
     </div>
   );
 }
