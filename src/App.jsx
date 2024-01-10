@@ -1,8 +1,16 @@
+import { useState } from "react";
+
+import SideBar from "./components/SideBar";
+import Content from "./components/Content";
+
 function App() {
+  const [isClickedNewProject, setIsClickedNewProject] = useState(false);
+
   return (
-    <>
-      <h1 className="my-8 text-center text-5xl font-bold">Hello World</h1>
-    </>
+    <div className="flex gap-8">
+      <SideBar/>
+      <Content/>
+    </div>
   );
 }
 
