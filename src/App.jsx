@@ -1,7 +1,9 @@
 import { useState, useRef} from "react";
 
 import SideBar from "./components/SideBar";
-import Content from "./components/Content";
+import EmptyContent from "./components/EmptyContent";
+import AddingNewProject from "./components/AddingNewProject";
+import ProjectDetails from "./components/ProjectDetails";
 
 function App() {
   const [isClickedNewProject, setIsClickedNewProject] = useState(false);
@@ -9,9 +11,11 @@ function App() {
   const [allProjects, setAllProjects] = useState([]);
 
   const formRef = useRef();
+  const addTaskRef = useRef();
 
   function handleClickAddNewProject(){
     setIsClickedNewProject(prev => !prev);
+    setSelectedProject(null)
   }
 
   function handleClickSaveNewProject(title,description,date){
@@ -27,16 +31,15 @@ function App() {
     setAllProjects(prevProjects => [...prevProjects, newProject]);
     setIsClickedNewProject(prev => !prev);
     setSelectedProject(null);
-    //formRef.current.clear()
-    console.log(formRef.current)
   }
 
-  function handleClickOpenProject(title){
+  function handleOpenProject(title){
     const selectedProject = allProjects.find(project => project.title === title)
     setSelectedProject(selectedProject);
   }
 
-  function updateSelectedProject(selectedProject, task){
+  function updateSelectedProject(selectedProject){
+    const task = addTaskRef.current.value;
     const tasks = selectedProject.tasks;
     selectedProject.tasks = [task, ...tasks];
 
@@ -46,13 +49,17 @@ function App() {
       prevProjects.splice(indexSelectedProject, 1, selectedProject);
       return [...prevProjects]
     });
+    addTaskRef.current.value = '';
 
   }
 
   return (
     <div className="flex gap-10">
-      <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleClickOpenProject} projects={allProjects}/>
-      <Content  isClickedNewProject={isClickedNewProject} onClickSave={handleClickSaveNewProject} selectedProject={selectedProject} updateProjects={updateSelectedProject} ref={formRef}/>
+      <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
+      {(!isClickedNewProject && !selectedProject) && <EmptyContent/>}
+      {isClickedNewProject && <AddingNewProject onClickSave={handleClickSaveNewProject}/>}
+      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} ref={addTaskRef}/>}
+
     </div>
   );
 }

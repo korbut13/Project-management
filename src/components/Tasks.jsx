@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { useRef, forwardRef} from "react";
 
-export default function Tasks({selectedProject, updateProjects}){
+const Tasks = forwardRef(function Tasks({selectedProject, updateProjects}, addTaskRef){
   const inputRef = useRef();
 
   const tasks = selectedProject.tasks;
@@ -14,8 +14,8 @@ export default function Tasks({selectedProject, updateProjects}){
     <>
       <h2>Tasks</h2>
       <div className="flex gap-2">
-        <input ref={inputRef} type="text"></input>
-        <button onClick={() => updateProjects(selectedProject, inputRef.current.value)}>Add task</button>
+        <input ref={addTaskRef} type="text"></input>
+        <button onClick={() => updateProjects(selectedProject)}>Add task</button>
       </div>
       {!tasks.length && <p>This project does not have any tasks yet.</p>}
       {tasks.length && <ul>
@@ -30,4 +30,6 @@ export default function Tasks({selectedProject, updateProjects}){
       </ul>}
     </>
   )
-}
+});
+
+export default Tasks;
