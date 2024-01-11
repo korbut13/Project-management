@@ -59,12 +59,24 @@ function App() {
     setAllProjects(prevProjects => [...prevProjects])
   }
 
+  function removeProject(title){
+    const indexRemovedProject = allProjects.findIndex(project => project.title === title);
+    const projects = allProjects;
+    projects.splice(indexRemovedProject, 1);
+    setAllProjects(projects);
+    setSelectedProject(null);
+  }
+
+  function handleClose(){
+    setIsClickedNewProject(false)
+  }
+
   return (
     <div className="flex gap-10">
       <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
-      {(!isClickedNewProject && !selectedProject) && <EmptyContent/>}
-      {(isClickedNewProject && !selectedProject) && <AddingNewProject onClickSave={handleClickSaveNewProject}/>}
-      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} removeTask={removeTask} ref={addTaskRef}/>}
+      {(!isClickedNewProject && !selectedProject) && <EmptyContent onClickAddProject={handleClickAddNewProject}/>}
+      {(isClickedNewProject && !selectedProject) && <AddingNewProject onClickSave={handleClickSaveNewProject} handleClose={handleClose}/>}
+      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} removeTask={removeTask} removeProject={removeProject} ref={addTaskRef}/>}
 
     </div>
   );
