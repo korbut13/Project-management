@@ -5,8 +5,9 @@ import Content from "./components/Content";
 
 function App() {
   const [isClickedNewProject, setIsClickedNewProject] = useState(false);
-  const [allProjects, setAllProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [allProjects, setAllProjects] = useState([]);
+
   const formRef = useRef();
 
   function handleClickAddNewProject(){
@@ -14,14 +15,14 @@ function App() {
   }
 
   function handleClickSaveNewProject(title,description,date){
-    console.log(date)
     const dateObject = new Date(date);
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
     const formattedDate = dateObject.toLocaleDateString('en-US', options);
     const newProject = {
       title,
       description,
-      date: formattedDate
+      date: formattedDate,
+      tasks:[]
     };
     setAllProjects(prevProjects => [...prevProjects, newProject]);
     setIsClickedNewProject(prev => !prev);
@@ -30,14 +31,28 @@ function App() {
     console.log(formRef.current)
   }
 
-  function handleSelectProject(projectName){
-    setSelectedProject(projectName);
+  function handleClickOpenProject(title){
+    const selectedProject = allProjects.find(project => project.title === title)
+    setSelectedProject(selectedProject);
+  }
+
+  function updateSelectedProject(selectedProject, task){
+    const tasks = selectedProject.tasks;
+    selectedProject.tasks = [task, ...tasks];
+
+    const indexSelectedProject = allProjects.findIndex(project => project.title === selectedProject.title);
+
+    setAllProjects(prevProjects => {
+      prevProjects.splice(indexSelectedProject, 1, selectedProject);
+      return [...prevProjects]
+    });
+
   }
 
   return (
     <div className="flex gap-10">
-      <SideBar onSelectProject={handleSelectProject} onClickAddProject={handleClickAddNewProject} projects={allProjects}/>
-      <Content selectedProject={selectedProject} isClickedNewProject={isClickedNewProject} onClickSave={handleClickSaveNewProject} ref={formRef}/>
+      <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleClickOpenProject} projects={allProjects}/>
+      <Content  isClickedNewProject={isClickedNewProject} onClickSave={handleClickSaveNewProject} selectedProject={selectedProject} updateProjects={updateSelectedProject} ref={formRef}/>
     </div>
   );
 }

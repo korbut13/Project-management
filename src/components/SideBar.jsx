@@ -1,9 +1,4 @@
-export default function SideBar({onClickAddProject, projects, onSelectProject}){
-
-  function handleOpenProject(title){
-    const selectedProject = projects.find(project => project.title === title);
-    onSelectProject(selectedProject);
-  }
+export default function SideBar({onClickAddProject, onClickOpenProject, projects}){
 
   return(
     <div className="bg-stone-900 w-1/5 h-screen mt-8 rounded-tr-xl pt-8 flex flex-col items-center space-x-4 gap-8 text-white">
@@ -13,7 +8,7 @@ export default function SideBar({onClickAddProject, projects, onSelectProject}){
       </button>
       {projects.map(project => {
         return (
-          <button key={project.title} onClick={() => handleOpenProject(project.title)}>{project.title}</button>
+          <button key={project.title} onClick={() => onClickOpenProject(project.title)}>{project.title}</button>
         )
       })}
     </div>
