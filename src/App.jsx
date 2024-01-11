@@ -4,14 +4,23 @@ import SideBar from "./components/SideBar";
 import EmptyContent from "./components/EmptyContent";
 import AddingNewProject from "./components/AddingNewProject";
 import ProjectDetails from "./components/ProjectDetails";
+import ModalWarning from "./components/ModalWarning";
 
 function App() {
   const [isClickedNewProject, setIsClickedNewProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [allProjects, setAllProjects] = useState([]);
+  const [openWarning, setOpenWarning] = useState(false);
 
-  const formRef = useRef();
   const addTaskRef = useRef();
+
+  let content = <EmptyContent onClickAddProject={handleClickAddNewProject}/>;
+
+  if(isClickedNewProject){
+    content = <AddingNewProject onClickSave={handleClickSaveNewProject} onClickClose={handleClose}/>
+  }else if(selectedProject && !isClickedNewProject){
+    content =  <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} removeTask={removeTask} removeProject={removeProject} ref={addTaskRef}/>
+  }
 
   function handleClickAddNewProject(){
     setIsClickedNewProject(prev => !prev);
@@ -19,18 +28,23 @@ function App() {
   }
 
   function handleClickSaveNewProject(title,description,date){
-    const dateObject = new Date(date);
-    const options = { month: 'short', day: 'numeric', year: 'numeric' };
-    const formattedDate = dateObject.toLocaleDateString('en-US', options);
-    const newProject = {
-      title,
-      description,
-      date: formattedDate,
-      tasks:[]
-    };
-    setAllProjects(prevProjects => [...prevProjects, newProject]);
-    setIsClickedNewProject(prev => !prev);
-    setSelectedProject(null);
+    if(!title.length || !date.length){
+      setOpenWarning(true);
+    }else{
+      const dateObject = new Date(date);
+      const options = { month: 'short', day: 'numeric', year: 'numeric' };
+      const formattedDate = dateObject.toLocaleDateString('en-US', options);
+      const newProject = {
+        title,
+        description,
+        date: formattedDate,
+        tasks:[]
+      };
+      setAllProjects(prevProjects => [...prevProjects, newProject]);
+      setIsClickedNewProject(prev => !prev);
+      setSelectedProject(null);
+      setOpenWarning(false)
+    }
   }
 
   function handleOpenProject(title){
@@ -74,10 +88,8 @@ function App() {
   return (
     <div className="flex gap-10">
       <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
-      {(!isClickedNewProject && !selectedProject) && <EmptyContent onClickAddProject={handleClickAddNewProject}/>}
-      {(isClickedNewProject && !selectedProject) && <AddingNewProject onClickSave={handleClickSaveNewProject} handleClose={handleClose}/>}
-      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} removeTask={removeTask} removeProject={removeProject} ref={addTaskRef}/>}
-
+      <ModalWarning isOpen={openWarning}/>
+      {content}
     </div>
   );
 }

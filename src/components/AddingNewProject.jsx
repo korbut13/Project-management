@@ -1,6 +1,6 @@
 import { useRef, forwardRef, useImperativeHandle} from "react";
 
-export default function AddingNewProject({onClickSave, handleClose}){
+export default function AddingNewProject({onClickSave, onClickClose}){
   const titleInput = useRef();
   const descriptionInput = useRef();
   const dateInput = useRef();
@@ -12,7 +12,7 @@ export default function AddingNewProject({onClickSave, handleClose}){
   return (
     <div className="flex flex-col gap-8 items-center mt-16 w-7/12">
       <div className="flex flex-row justify-end w-full">
-        <button className={`text-neutral-900 bg-white ${buttonClass}`} onClick={handleClose}>Cancel</button>
+        <button className={`text-neutral-900 bg-white ${buttonClass}`} onClick={onClickClose}>Cancel</button>
         <button className={`text-neutral-400  bg-stone-800 ${buttonClass}`}
           type="submit" onClick={() => onClickSave(titleInput.current.value,descriptionInput.current.value,dateInput.current.value)}
         >
