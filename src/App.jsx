@@ -14,10 +14,14 @@ function App() {
   }
 
   function handleClickSaveNewProject(title,description,date){
+    console.log(date)
+    const dateObject = new Date(date);
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const formattedDate = dateObject.toLocaleDateString('en-US', options);
     const newProject = {
       title,
       description,
-      date
+      date: formattedDate
     };
     setAllProjects(prevProjects => [...prevProjects, newProject]);
     setIsClickedNewProject(prev => !prev);

@@ -6,18 +6,17 @@ import ProjectDesctiption from "./ProjectDescription";
 
 const Content = forwardRef(function Content({isClickedNewProject, onClickSave, selectedProject}, ref){
   let contentMaterial = <EmptyContent/>;
+  let classNameContent = "flex flex-col gap-8 items-center mt-16 w-7/12";
 
   if(isClickedNewProject){
     contentMaterial = <AddingNewProject onClickSave={onClickSave} ref={ref}/>
   }else if(selectedProject && !isClickedNewProject){
     contentMaterial = <ProjectDesctiption {...selectedProject}/>;
+    classNameContent = "flex flex-col gap-2 mt-16 w-7/12";
   }
 
   return (
-    <div className="flex flex-col gap-8 items-center mt-16 w-7/12">
-      {/* {selectedProject && <ProjectDesctiption {...selectedProject}/>}
-      {!isClickedNewProject && <EmptyContent/>}
-      {isClickedNewProject && <AddingNewProject onClickSave={onClickSave} ref={ref}/>} */}
+    <div className={classNameContent}>
       {contentMaterial}
     </div>
   )
