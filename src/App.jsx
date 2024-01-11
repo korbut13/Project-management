@@ -50,15 +50,21 @@ function App() {
       return [...prevProjects]
     });
     addTaskRef.current.value = '';
+  }
 
+  function removeTask(selectedProject, task){
+    const tasks = selectedProject.tasks;
+    const indexRemovedTask = tasks.findIndex(el => el === task);
+    tasks.splice(indexRemovedTask, 1);
+    setAllProjects(prevProjects => [...prevProjects])
   }
 
   return (
     <div className="flex gap-10">
       <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
       {(!isClickedNewProject && !selectedProject) && <EmptyContent/>}
-      {isClickedNewProject && <AddingNewProject onClickSave={handleClickSaveNewProject}/>}
-      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} ref={addTaskRef}/>}
+      {(isClickedNewProject && !selectedProject) && <AddingNewProject onClickSave={handleClickSaveNewProject}/>}
+      {selectedProject && <ProjectDetails selectedProject={selectedProject} updateProjects={updateSelectedProject} removeTask={removeTask} ref={addTaskRef}/>}
 
     </div>
   );

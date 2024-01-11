@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-const ProjectDetails = forwardRef(function ProjectDetails({selectedProject, updateProjects}, ref){
+const ProjectDetails = forwardRef(function ProjectDetails({selectedProject, updateProjects, removeTask}, ref){
   const tasks = selectedProject.tasks;
   return (
     <div className="flex flex-col gap-2 mt-16 w-7/12">
@@ -12,16 +12,17 @@ const ProjectDetails = forwardRef(function ProjectDetails({selectedProject, upda
       <p className="border-b-2 border-b-stone-300 pb-4">{selectedProject.description}</p>
       <h2>Tasks</h2>
       <div className="flex gap-2">
-        <input ref={ref} type="text"></input>
+        <input className=" bg-stone-300 rounded-sm" ref={ref} type="text"></input>
         <button onClick={() => updateProjects(selectedProject)}>Add task</button>
       </div>
       {!tasks.length && (<p>This project does not have any tasks yet.</p>)}
-      {tasks.length > 0 && (<ul>
+      {tasks.length > 0 && (
+      <ul className=" bg-stone-200 rounded-lg p-6">
         {tasks.map(task => {
           return (
-            <li key={task}>
+            <li key={task} className="flex justify-between mb-2">
               <p>{task}</p>
-              <button>Clear</button>
+              <button onClick={() => removeTask(selectedProject, task)}>Clear</button>
             </li>
           )
         })}
