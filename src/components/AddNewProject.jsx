@@ -2,7 +2,7 @@ import { useRef, forwardRef, useImperativeHandle} from "react";
 
 import Input from "./Input";
 
-export default function AddingNewProject({onClickSave, onClickClose}){
+export default function AddNewProject({onClickSave, onClickClose}){
   const titleInput = useRef();
   const descriptionInput = useRef();
   const dateInput = useRef();
