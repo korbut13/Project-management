@@ -86,9 +86,9 @@ function App() {
   }
 
   return (
-    <main className="flex gap-10 h-screen my-8">
+    <main className="flex gap-8 h-screen mt-8">
       <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
-      <ModalWarning isOpen={openWarning}/>
+      {/* <ModalWarning isOpen={openWarning}/> */}
       {content}
     </main>
   );
