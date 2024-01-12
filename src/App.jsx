@@ -86,11 +86,11 @@ function App() {
   }
 
   return (
-    <div className="flex gap-10">
+    <main className="flex gap-10 h-screen my-8">
       <SideBar  onClickAddProject={handleClickAddNewProject} onClickOpenProject={handleOpenProject} projects={allProjects}/>
       <ModalWarning isOpen={openWarning}/>
       {content}
-    </div>
+    </main>
   );
 }
 
